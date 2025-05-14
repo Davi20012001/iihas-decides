@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+<head><title>IIHAS Vote</title></head>
+<body>
+  <h2>Cast Your Vote</h2>
+  <input id="token" placeholder="Enter your token"><br>
+  <label>President:</label>
+  <select id="president">
+    <option>Nagasha Lydia</option>
+    <option>Kirabo John</option>
+  </select><br>
+  <label>Speaker:</label>
+  <select id="speaker">
+    <option>Shakira Nassuna</option>
+  </select><br>
+  <label>Sports:</label>
+  <select id="sports">
+    <option>Tangenge Edwin</option>
+    <option>Blair Mugumya</option>
+  </select><br>
+  <label>Finance:</label>
+  <select id="finance">
+    <option>Becky</option>
+    <option>Viola N</option>
+  </select><br>
+  <button onclick="submitVote()">Submit Vote</button>
+  <p id="response"></p>
+  <script>
+    function submitVote() {
+      fetch('/submit-vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: document.getElementById('token').value,
+          president: document.getElementById('president').value,
+          speaker: document.getElementById('speaker').value,
+          sports: document.getElementById('sports').value,
+          finance: document.getElementById('finance').value
+        })
+      }).then(res => res.json()).then(data => {
+        document.getElementById('response').textContent = data.message || data.error;
+      });
+    }
+  </script>
+</body>
+</html>

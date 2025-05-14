@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html>
+<head><title>IIHAS Admin</title></head>
+<body>
+  <h2>Admin Login</h2>
+  <input id="password" placeholder="Enter admin password"><br>
+  <button onclick="login()">Login</button>
+  <div id="results" style="display:none;">
+    <h3>Live Results</h3>
+    <pre id="data"></pre>
+  </div>
+  <script>
+    function login() {
+      const pass = document.getElementById('password').value;
+      fetch('/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pass })
+      }).then(res => res.json()).then(data => {
+        if (data.success) {
+          document.getElementById('results').style.display = 'block';
+          setInterval(() => {
+            fetch('/results').then(r => r.json()).then(data => {
+              document.getElementById('data').textContent = JSON.stringify(data, null, 2);
+            });
+          }, 3000);
+        } else {
+          alert(data.error);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
